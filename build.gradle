@@ -1,0 +1,205 @@
+plugins {
+    id 'fml-loom' version '0.1'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+// Replace "Country" with an ISO country code, for example: "CN".
+def useLocalizedArchiveName = Locale.default.country.equalsIgnoreCase("Country")
+
+base {
+    // Replace "LocalizedArchiveName" with the localized alias.
+    // Prefix local JAR names with an optional alias, for example: "[Alias]" + archives_base_name.
+    // Maven publishing keeps using the lowercase maven_id configured below.
+    archivesName = useLocalizedArchiveName
+            ? "[LocalizedArchiveName]${project.archives_base_name}"
+            : project.archives_base_name
+}
+
+repositories {
+    // Add repositories to retrieve artifacts from in here.
+    // Only declare repositories required by this project because Loom provides
+    // the repositories needed for Minecraft and its libraries automatically.
+    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+    // for more information about repository declarations.
+    maven {
+        name = "Spongepowered"
+        url = "https://repo.spongepowered.org/repository/maven-public/"
+    }// Dependency library(FastUtil, Gson, etc) download source
+    maven {
+        name = "ModdedMITE"
+        url = "https://maven.limingzxc.top/repository/maven-public/"
+    }// Mods & Loaders download source
+}
+
+configurations {
+    fml
+}
+
+dependencies {
+    // Dependency versions are maintained in gradle.properties or alongside project-specific declarations below.
+    // Use implementation for required mods, compileOnly for optional integrations,
+    // and localRuntime for mods needed only in the development environment.
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    implementation("it.unimi.dsi:fastutil:8.5.12")
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    fml "com.github.MinecraftIsTooEasy:FishModLoader:3.4.2"
+    implementation "com.github.MinecraftIsTooEasy:FishModLoader:3.4.2"
+
+    // The most basic dependency library mod, with a status similar to Fabric API
+    implementation "com.github.MinecraftIsTooEasy:RustedIronCore:1.5.5"
+
+    // EMI is a hard dependency: this mod is published as an EMI addon and registers
+    // its recipe categories through EMI's "emi" entrypoint.
+    implementation "com.github.MinecraftIsTooEasy:EMI:${project.emi_version}"
+
+    // To add strong dependencies, use "implementation" like above
+    // To compile mod integrations(e.g. ModMenu), use "compileOnly"
+    // To add mods for running client, use "localRuntime"
+}
+
+def fmlResolvedFile = configurations.fml.singleFile
+
+loom {
+    // LWJGL 2.9.1 drives its macOS window through AWT, which needs the main thread for its own event
+    // loop. Loom adds -XstartOnFirstThread for LWJGL 3/GLFW, and on this version that flag silently
+    // costs us the window: the process starts, mixins apply, the game reaches the main menu, and
+    // nothing is ever mapped to screen. FishModLoader detects the same conflict by looking for
+    // JAVA_STARTED_ON_FIRST_THREAD_<pid> in LoaderUtil.hasAwtSupport() and then reports AWT as
+    // unavailable. retroEMI-MITE drops the flag the same way.
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        runConfigs.named("client").get().vmArgs.remove("-XstartOnFirstThread")
+    }
+
+    accessWidenerPath = file("src/main/resources/neresources.accesswidener")
+    mergedMinecraftJar()
+    setFML(fmlResolvedFile)
+    dependencies.add("mappings", fmlMCPMappings())
+    mods {
+        "neresources" {
+            sourceSet sourceSets.main
+//            sourceSet sourceSets.client
+//            sourceSet sourceSets.server
+//            For modules in the 'src' directory, only the main source set is required by default.
+        }
+    }
+    runs {
+        client {
+            String name = project.username
+            String width = project.screen_width
+            String height = project.screen_height
+            programArgs "--userProperties", "{}", "--username", name, "--session", "a.a.a.a", "--width", width, "--height", height
+        }
+//        server {
+//            programArgs "--", ""
+//        }
+    }
+}
+
+// Development diagnostic: exercises the MITE static loot tables and null-world entity constructors
+// this mod depends on, without launching a client. See neresources.probe.HeadlessProbe.
+tasks.register("probe", JavaExec) {
+    group = "verification"
+    description = "Checks that the MITE data this mod reads can be touched outside a running world."
+    mainClass = "neresources.probe.HeadlessProbe"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+// Every forked JVM — runClient, runServer and probe — must be Java 17.
+// Mixin 0.8.5 bundles an ASM that cannot read class files above major version 61, so on a newer JVM
+// it fails to read the JDK's own classes ("Error loading class: java/lang/String") and then aborts
+// applying mixins. Loom's run tasks extend JavaExec, and Gradle does not hand JavaExec the toolchain
+// declared in java{} — only compile and test tasks get that — so the launcher is set explicitly here.
+//
+// On Apple Silicon the JVM must also be x86_64. LWJGL 2.9.1 predates arm64 Macs and ships no arm64
+// macOS natives, so an arm64 JVM dies in Sys.<clinit> with an UnsatisfiedLinkError on liblwjgl.dylib
+// before the window ever opens; an x86_64 JVM under Rosetta loads the shipped natives as they are.
+// Gradle matches toolchains on version and vendor only, never on architecture, so the executable is
+// pointed at an explicit JVM instead. Setting both `executable` and `javaLauncher` on one JavaExec
+// task makes Gradle compare the two and fail, hence the either/or below.
+def runJvmHome = project.findProperty("run_jvm_home")?.toString()?.trim()
+def runJavaExecutable = runJvmHome ? file("${runJvmHome}/bin/java") : null
+
+tasks.withType(JavaExec).configureEach {
+    if (runJavaExecutable != null) {
+        executable = runJavaExecutable.absolutePath
+        doFirst {
+            if (!runJavaExecutable.exists()) {
+                throw new GradleException(
+                        "run_jvm_home points at a missing JVM: ${runJavaExecutable}. Set it to an " +
+                                "x86_64 Java 17 home, or clear it to fall back to a Java 17 toolchain.")
+            }
+        }
+    } else {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+}
+
+processResources {
+    inputs.properties(
+            version: project.version,
+            id: project.mod_id,
+            name: project.mod_name
+    )
+
+    filesMatching("fml.mod.json") {
+        expand(inputs.properties)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+}
+
+java {
+    // Loom automatically attaches sourcesJar to remapSourcesJar and the build lifecycle when it is present.
+    // Remove this line only when source artifacts should not be generated.
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    inputs.property "archivesName", project.base.archivesName
+
+    from("LICENSE") {
+        rename { String fileName -> "${fileName}_${inputs.properties.archivesName}" }
+    }
+}
+
+// Configure the Maven publication.
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.maven_id
+            from(components.java)
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+
+        // ModdedMITE release repository.
+        maven {
+            name = "ModdedMITE"
+            url = uri("https://maven.limingzxc.top/repository/maven-releases/")
+            credentials {
+                // Read only from gradle.properties (user level, your gradle_home)
+                username = project.findProperty("nexusUsername")
+                password = project.findProperty("nexusPassword")
+            }
+        }
+    }
+}

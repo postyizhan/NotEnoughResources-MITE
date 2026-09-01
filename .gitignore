@@ -1,0 +1,37 @@
+# Build output and Gradle state
+/build/
+/.gradle/
+*.class
+
+# Development game instance (worlds, options, logs, crash reports)
+/run/
+/logs/
+/crash-reports/
+
+# Machine-local JVMs. runtime/.gitignore keeps its own contents out; this keeps
+# the directory itself from being suggested for staging.
+/runtime/*
+!/runtime/.gitignore
+
+# Reference clones of upstream projects. These are separate git repositories
+# checked out here for reading FishModLoader, EMI and the 1.7.10 original; they
+# are not part of this build.
+/FishModLoader/
+/retroEMI-MITE/
+/NotEnoughResources/
+
+# IDE
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.settings/
+/.classpath
+/.project
+/bin/
+/out/
+/.vscode/
+
+# macOS
+.DS_Store
+._*

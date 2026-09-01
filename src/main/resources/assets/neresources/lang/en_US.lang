@@ -3,6 +3,7 @@ emi.category.neresources.mob=Mob Drops
 emi.category.neresources.plant=Plant Drops
 emi.category.neresources.dungeon=Chest Loot
 emi.category.neresources.enchantment=Enchantments
+emi.category.neresources.trade=Villager Trades
 
 ner.any=any
 ner.above=above
@@ -60,3 +61,12 @@ ner.conditional.mature=Only when mature
 ner.conditional.blighted=Not when blighted
 ner.conditional.sizeOne=Only at the smallest size
 ner.conditional.web=One per unused web
+
+ner.trade.profession.farmer=Farmer
+ner.trade.profession.librarian=Librarian
+ner.trade.profession.priest=Priest
+ner.trade.profession.smith=Blacksmith
+ner.trade.profession.butcher=Butcher
+ner.trade.profession.villager=Villager
+ner.trade.maxUses=Up to %s uses
+ner.trade.enchantService=Comes back with a random enchantment

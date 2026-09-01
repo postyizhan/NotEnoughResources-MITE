@@ -43,3 +43,13 @@ accessible field net/minecraft/WorldServer bonusChestContent [Lnet/minecraft/Wei
 accessible field net/minecraft/EntityWitch witchDrops [I
 accessible field net/minecraft/EntityZombie rare_drops_standard [Lnet/minecraft/Item;
 accessible field net/minecraft/EntityZombie rare_drops_villager [Lnet/minecraft/Item;
+
+# --- Villager trades ------------------------------------------------------
+# Which items a profession trades is inlined in the private
+# addDefaultEquipmentAndRecipies, so that part is transcribed by hand. The amounts
+# are not: they come from these two tables, read directly so retuned prices stay
+# correct. A value in villagerStockList is how many of an item buy one emerald; in
+# blacksmithSellingList a negative value is how many items one emerald buys, and a
+# positive one is the emerald price of a single item.
+accessible field net/minecraft/EntityVillager villagerStockList Ljava/util/Map;
+accessible field net/minecraft/EntityVillager blacksmithSellingList Ljava/util/Map;

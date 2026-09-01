@@ -3,6 +3,7 @@ emi.category.neresources.mob=生物掉落
 emi.category.neresources.plant=植物掉落
 emi.category.neresources.dungeon=宝箱战利品
 emi.category.neresources.enchantment=附魔
+emi.category.neresources.trade=村民交易
 
 ner.any=任意
 ner.above=高于
@@ -60,3 +61,12 @@ ner.conditional.mature=仅成熟时掉落
 ner.conditional.blighted=枯萎时不掉落
 ner.conditional.sizeOne=仅最小体型掉落
 ner.conditional.web=每个未用蛛网掉落一个
+
+ner.trade.profession.farmer=农民
+ner.trade.profession.librarian=图书管理员
+ner.trade.profession.priest=牧师
+ner.trade.profession.smith=铁匠
+ner.trade.profession.butcher=屠夫
+ner.trade.profession.villager=村民
+ner.trade.maxUses=最多可交易 %s 次
+ner.trade.enchantService=归还时附带随机附魔

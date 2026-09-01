@@ -1,0 +1,45 @@
+accessWidener v2 named
+
+# --- Ore generation -------------------------------------------------------
+# WorldGenMinable holds the vein size (numberOfBlocks) and the ore block id.
+# BiomeDecorator instantiates one generator per ore; reading them off a throwaway
+# BiomeDecorator keeps vein sizes correct even if MITE retunes them.
+accessible field net/minecraft/WorldGenMinable numberOfBlocks I
+accessible field net/minecraft/WorldGenMinable minableBlockId I
+accessible field net/minecraft/BiomeDecorator dirtGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator gravelGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator coalGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator ironGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator copperGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator silverGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator mithrilGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator adamantiteGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator goldGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator redstoneGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator diamondGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator lapisGen Lnet/minecraft/WorldGenMinable;
+accessible field net/minecraft/BiomeDecorator silverfishGen Lnet/minecraft/WorldGenMinable;
+
+# --- Chest loot -----------------------------------------------------------
+# 1.6.4 has no Forge ChestGenHooks, so loot tables are read from the static
+# arrays each structure keeps for itself.
+accessible field net/minecraft/WeightedRandomItem itemWeight I
+accessible field net/minecraft/WeightedRandomChestContent theItemId Lnet/minecraft/ItemStack;
+accessible field net/minecraft/WeightedRandomChestContent min_quantity I
+accessible field net/minecraft/WeightedRandomChestContent max_quantity I
+accessible field net/minecraft/WorldGenDungeons field_111189_a [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/WorldGenDungeons chest_contents_for_underworld [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/StructureMineshaftPieces mineshaftChestContents [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/ComponentScatteredFeatureDesertPyramid itemsToGenerateInTemple [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/ComponentStrongholdChestCorridor strongholdChestContents [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/ComponentStrongholdLibrary strongholdLibraryChestContents [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/ComponentStrongholdRoomCrossing strongholdRoomCrossingChestContents [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/ComponentVillageHouse2 villageBlacksmithChestContents [Lnet/minecraft/WeightedRandomChestContent;
+accessible field net/minecraft/WorldServer bonusChestContent [Lnet/minecraft/WeightedRandomChestContent;
+
+# --- Mobs -----------------------------------------------------------------
+# Drop tables are reproduced by hand from dropFewItems, but the rare-drop pools
+# are read directly so they stay in sync with MITE.
+accessible field net/minecraft/EntityWitch witchDrops [I
+accessible field net/minecraft/EntityZombie rare_drops_standard [Lnet/minecraft/Item;
+accessible field net/minecraft/EntityZombie rare_drops_villager [Lnet/minecraft/Item;

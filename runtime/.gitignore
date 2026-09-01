@@ -1,0 +1,3 @@
+# Machine-local JVMs live here; only this ignore file is tracked.
+*
+!.gitignore

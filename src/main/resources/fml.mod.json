@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "Shows ore height distributions, mob drops, plant drops, chest loot and enchantments as EMI recipe categories.",
+  "authors": [
+    "postyizhan"
+  ],
+  "contributors": [
+    "Way2Muchnoise",
+    "Mannor"
+  ],
+  "contact": {
+    "sources": "https://github.com/postyizhan/NotEnoughResources-MITE"
+  },
+  "license": "MIT",
+  "icon": "assets/neresources/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "neresources.NEResources"
+    ],
+    "client": [
+      "neresources.NEResourcesClient"
+    ],
+    "emi": [
+      "neresources.emi.NERPlugin"
+    ]
+  },
+  "depends": {
+    "fishmodloader": ">=3.4.0",
+    "minecraft": "1.6.4-mite",
+    "java": ">=17",
+    "rusted_iron_core": ">=1.3.5",
+    "emi": ">=1.1.27"
+  },
+  "accessWidener": "neresources.accesswidener"
+}

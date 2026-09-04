@@ -45,7 +45,11 @@ public class TradeEmiRecipe implements EmiRecipe {
     private static final int ARROW_X = 60;
     private static final int OUTPUT_X = 85;
 
-    /** One villager per profession, shared by every recipe so the models are built once. */
+    /**
+     * One villager per profession, shared by every recipe so the models are built once. A profession
+     * that could not be built is remembered as an absent value, because EMI rebuilds a recipe's widgets
+     * on every frame it previews it and retrying there would fill the log.
+     */
     private static final Map<Integer, EntityVillager> VILLAGERS = new HashMap<Integer, EntityVillager>();
 
     private static final String[] PROFESSION_KEYS = {
@@ -177,18 +181,17 @@ public class TradeEmiRecipe implements EmiRecipe {
 
     /** @return the shared villager for a profession, or null if one could not be built. */
     private static EntityVillager villager(int profession) {
-        EntityVillager cached = VILLAGERS.get(profession);
-        if (cached != null) {
-            return cached;
+        if (VILLAGERS.containsKey(profession)) {
+            return VILLAGERS.get(profession);
         }
+        EntityVillager villager = null;
         try {
-            EntityVillager villager = new EntityVillager(Minecraft.getMinecraft().theWorld, profession);
-            VILLAGERS.put(profession, villager);
-            return villager;
+            villager = new EntityVillager(Minecraft.getMinecraft().theWorld, profession);
         } catch (Throwable t) {
             NEResources.LOGGER.warn("Could not build a villager for profession {}", profession, t);
-            return null;
         }
+        VILLAGERS.put(profession, villager);
+        return villager;
     }
 
     private String title() {

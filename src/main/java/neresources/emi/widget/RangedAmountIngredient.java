@@ -86,9 +86,11 @@ public class RangedAmountIngredient implements EmiIngredient {
         if (min == max) {
             context.drawTextWithShadow(Text.literal(label), x + 17 - width, y + 9, -1);
         } else {
-            // Half scale doubles the coordinates; 19 lifts the smaller text back to the slot's corner.
+            // Half scale halves both the text and the coordinates, so they are doubled here to land
+            // where they were meant to. Bottom-aligning four pixels of text against the slot's inner
+            // edge at y + 17 puts its top at y + 13, which is where the full-size number sits too.
             context.matrices().scale(0.5D, 0.5D, 1.0D);
-            context.drawTextWithShadow(Text.literal(label), (x + 17) * 2 - width, (y + 19) * 2, -1);
+            context.drawTextWithShadow(Text.literal(label), (x + 17) * 2 - width, (y + 13) * 2, -1);
         }
         context.pop();
     }

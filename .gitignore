@@ -14,11 +14,12 @@
 !/runtime/.gitignore
 
 # Reference clones of upstream projects. These are separate git repositories
-# checked out here for reading FishModLoader, EMI and the 1.7.10 original; they
-# are not part of this build.
+# checked out here for reading FishModLoader, EMI, the 1.7.10 original and the
+# EMI addon the trades category follows; they are not part of this build.
 /FishModLoader/
 /retroEMI-MITE/
 /NotEnoughResources/
+/EMITrades/
 
 # IDE
 /.idea/

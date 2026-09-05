@@ -45,10 +45,12 @@ import neresources.entry.DungeonEntry;
 import neresources.entry.MobEntry;
 import neresources.entry.OreMatchEntry;
 import neresources.entry.PlantEntry;
+import neresources.entry.TradeEntry;
 import neresources.mite.MITEChestScraper;
 import neresources.mite.MITEMobData;
 import neresources.mite.MITEOreScraper;
 import neresources.mite.MITEPlantData;
+import neresources.mite.MITETradeData;
 import neresources.util.StackHelper;
 import net.minecraft.Enchantment;
 
@@ -164,6 +166,24 @@ public final class HeadlessProbe {
                 }
                 summary.append("\n          ").append(String.format("%-28s %s",
                         StackHelper.nameOf(plant.getPlant()), drops));
+            }
+            return summary.toString();
+        });
+
+        check("MITETradeData.collect", () -> {
+            List<TradeEntry> trades = MITETradeData.collect();
+            int[] perProfession = new int[5];
+            for (TradeEntry trade : trades) {
+                int profession = trade.getProfession();
+                if (profession >= 0 && profession < perProfession.length) {
+                    perProfession[profession]++;
+                }
+            }
+            String[] names = {"farmer", "librarian", "priest", "smith", "butcher"};
+            StringBuilder summary = new StringBuilder(trades.size() + " trades");
+            for (int profession = 0; profession < names.length; profession++) {
+                summary.append("\n          ").append(String.format("%-12s %3d",
+                        names[profession], perProfession[profession]));
             }
             return summary.toString();
         });

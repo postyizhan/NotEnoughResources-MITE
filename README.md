@@ -1,6 +1,6 @@
 # NotEnoughResources-MITE
 
-An EMI addon for MITE 1.6.4 on FishModLoader. It adds five categories to EMI's sidebar:
+An EMI addon for MITE 1.6.4 on FishModLoader. It adds six categories to EMI's sidebar:
 
 | Category | What it shows |
 | --- | --- |
@@ -9,6 +9,7 @@ An EMI addon for MITE 1.6.4 on FishModLoader. It adds five categories to EMI's s
 | Plant Drops | What crops and grass yield when harvested |
 | Chest Loot | Every generated chest, its stack count, and per-item odds |
 | Enchantments | Which enchantments each item accepts, with level ranges |
+| Villager Trades | Every trade each profession can offer, with its price range |
 
 This is a rewrite of [NotEnoughResources](https://github.com/Way2Muchnoise/NotEnoughResources)
 (1.7.10 Forge + NEI) against MITE's own generation code, not a port of the original jar.
@@ -35,6 +36,11 @@ version you are running:
 - **Mob and plant drops** are transcribed by hand from `dropFewItems` and `dropBlockAsEntityItem`,
   because those need a live world and drop items into it rather than returning them. Every table in
   `MITEMobData` and `MITEPlantData` cites the method it came from.
+- **Villager trades** are half read, half transcribed. Which items a profession deals in is inlined in
+  the private `addDefaultEquipmentAndRecipies`, which hands out one random trade per call and cannot
+  be asked for the full set, so that list is written out in `MITETradeData`. The amounts are not:
+  they come from MITE's own `villagerStockList` and `blacksmithSellingList`, read through the access
+  widener, so retuned prices need no change here.
 
 ### Reading the ore percentages
 
@@ -48,6 +54,24 @@ Two approximations remain, and both only matter within a few blocks of bedrock o
 Quantities on the mob pages assume no Looting or Butchering; drops that respond to those
 enchantments say so in their tooltip. Percentages are for a kill by the player, since MITE reduces
 most drops otherwise.
+
+### Reading the trade pages
+
+MITE runs the 1.6.4 trading model, not the levelled one from 1.14. A villager starts with a single
+trade and unlocks the next only after the last one is used, drawn from a shuffled pool, so a page
+lists what a profession *can* offer rather than what any one villager will have. There are no trade
+levels, no wandering trader, and no experience — every trade allows the seven uses `MerchantRecipe`
+fixes in its constructor, which is why each page states the same limit.
+
+Prices are usually a range, drawn in the slot as `4-5`, because MITE rolls the amount per trade.
+Three things are deliberately not spelled out:
+
+- **How likely a trade is.** Each candidate is rolled against a probability that shrinks as the
+  villager's list grows, so there is no fixed number to put on a page.
+- **What the priest's enchantment will be.** The enchanting service rolls one per trade, so the
+  result is drawn unenchanted with a note rather than expanded into every outcome.
+- **Prices above a stack.** Enchanted books are the one trade MITE never clamps, so a high level can
+  ask for more emeralds than fit in a stack. The real range is shown rather than a capped one.
 
 ## Configuration
 

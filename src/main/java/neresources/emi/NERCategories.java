@@ -19,6 +19,7 @@ public final class NERCategories {
     public static final EmiRecipeCategory PLANT = category("plant", EmiStack.of(Block.tallGrass));
     public static final EmiRecipeCategory DUNGEON = category("dungeon", EmiStack.of(Block.chest));
     public static final EmiRecipeCategory ENCHANTMENT = category("enchantment", EmiStack.of(Block.enchantmentTable));
+    public static final EmiRecipeCategory TRADE = category("trade", EmiStack.of(Item.emerald));
 
     private NERCategories() {
     }

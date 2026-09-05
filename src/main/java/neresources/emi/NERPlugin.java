@@ -10,14 +10,17 @@ import neresources.emi.recipe.EnchantmentEmiRecipe;
 import neresources.emi.recipe.MobEmiRecipe;
 import neresources.emi.recipe.OreEmiRecipe;
 import neresources.emi.recipe.PlantEmiRecipe;
+import neresources.emi.recipe.TradeEmiRecipe;
 import neresources.entry.DungeonEntry;
 import neresources.entry.MobEntry;
 import neresources.entry.OreMatchEntry;
 import neresources.entry.PlantEntry;
+import neresources.entry.TradeEntry;
 import neresources.mite.MITEChestScraper;
 import neresources.mite.MITEMobData;
 import neresources.mite.MITEOreScraper;
 import neresources.mite.MITEPlantData;
+import neresources.mite.MITETradeData;
 import net.minecraft.Enchantment;
 import net.minecraft.Item;
 import net.minecraft.ItemStack;
@@ -42,6 +45,7 @@ public class NERPlugin implements EmiPlugin {
         registry.addCategory(NERCategories.PLANT);
         registry.addCategory(NERCategories.DUNGEON);
         registry.addCategory(NERCategories.ENCHANTMENT);
+        registry.addCategory(NERCategories.TRADE);
 
         // Placeholder entries keep each category visible while the data sources are wired up; they
         // are replaced one at a time as the scrapers land.
@@ -74,6 +78,14 @@ public class NERPlugin implements EmiPlugin {
             return recipes;
         });
         addAllSafely(registry, "enchantment", NERPlugin::enchantmentRecipes);
+        addAllSafely(registry, "trade", () -> {
+            List<EmiRecipe> recipes = new ArrayList<EmiRecipe>();
+            int index = 0;
+            for (TradeEntry entry : MITETradeData.collect()) {
+                recipes.add(new TradeEmiRecipe(entry, index++));
+            }
+            return recipes;
+        });
 
         NEResources.LOGGER.info("EMI plugin registration finished.");
     }

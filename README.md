@@ -4,12 +4,12 @@ An EMI addon for MITE 1.6.4 on FishModLoader. It adds six categories to EMI's si
 
 | Category | What it shows |
 | --- | --- |
-| Ore Distribution | The height curve for every ore, per dimension, with the best Y to dig at |
-| Mob Drops | Each mob's model, spawn light level, experience, and drop table |
-| Plant Drops | What crops and grass yield when harvested |
-| Chest Loot | Every generated chest, its stack count, and per-item odds |
-| Enchantments | Which enchantments each item accepts, with level ranges |
-| Villager Trades | Every trade each profession can offer, with its price range |
+| Ore Distribution | The height curve for every ore, per dimension, with the best Y to dig at <details><summary>[showcase]</summary>![](image/1.png)</details> |
+| Mob Drops | Each mob's model, spawn light level, experience, and drop table <details><summary>[showcase]</summary>![](image/2.png)</details> |
+| Plant Drops | What crops and grass yield when harvested <details><summary>[showcase]</summary>![](image/3.png)</details> |
+| Chest Loot | Every generated chest, its stack count, and per-item odds <details><summary>[showcase]</summary>![](image/4.png)</details> |
+| Enchantments | Which enchantments each item accepts, with level ranges <details><summary>[showcase]</summary>![](image/5.png)</details> |
+| Villager Trades | Every trade each profession can offer, with its price range <details><summary>[showcase]</summary>![](image/6.png)</details> |
 
 This is a rewrite of [NotEnoughResources](https://github.com/Way2Muchnoise/NotEnoughResources)
 (1.7.10 Forge + NEI) against MITE's own generation code, not a port of the original jar.

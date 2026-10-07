@@ -27,19 +27,43 @@ public class DungeonEmiRecipe implements EmiRecipe {
     private static final int FIRST_ROW_Y = 26;
     /** Room for a slot plus the odds line underneath it. */
     private static final int ROW_HEIGHT = SLOT_SIZE + 8;
+    private static final int PAGE_ROWS = 4;
+    private static final int PAGE_SIZE = COLUMNS * PAGE_ROWS;
 
     private final DungeonEntry entry;
     private final ResourceLocation id;
+    private final int page;
+    private final int pageCount;
     private final List<EmiStack> outputs = new ArrayList<EmiStack>();
     private final List<Float> chances = new ArrayList<Float>();
 
     public DungeonEmiRecipe(DungeonEntry entry) {
+        this(entry, 0, 1);
+    }
+
+    public DungeonEmiRecipe(DungeonEntry entry, int page, int pageCount) {
         this.entry = entry;
-        this.id = new ResourceLocation(NEResources.MOD_ID, "dungeon/" + entry.getNameKey());
+        this.page = page;
+        this.pageCount = pageCount;
+        this.id = new ResourceLocation(NEResources.MOD_ID,
+                "dungeon/" + entry.getNameKey() + "/" + page);
+        int first = page * PAGE_SIZE;
+        int last = Math.min(first + PAGE_SIZE, entry.getChestDrops().size());
+        int index = 0;
         for (Map.Entry<ItemStack, Float> drop : entry.getChestDrops().entrySet()) {
+            if (index++ < first) {
+                continue;
+            }
+            if (index > last) {
+                break;
+            }
             outputs.add(EmiStack.of(drop.getKey()).setChance(Math.min(drop.getValue(), 1.0F)));
             chances.add(drop.getValue());
         }
+    }
+
+    public static int getPageSize() {
+        return PAGE_SIZE;
     }
 
     @Override
@@ -90,7 +114,9 @@ public class DungeonEmiRecipe implements EmiRecipe {
     @Override
     public void addWidgets(WidgetHolder widgets) {
         widgets.addText(Text.translatable(entry.getNameKey()).asOrderedText(), 2, 2, 0xFFFFFFFF, true);
-        widgets.addText(Text.literal(stackCountLabel()).asOrderedText(), 2, 14, 0xFFA0A0A0, false);
+        String pageLabel = pageCount > 1 ? " (" + (page + 1) + "/" + pageCount + ")" : "";
+        widgets.addText(Text.literal(stackCountLabel() + pageLabel).asOrderedText(),
+                2, 14, 0xFFA0A0A0, false);
 
         for (int i = 0; i < outputs.size(); i++) {
             int column = i % COLUMNS;

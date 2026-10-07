@@ -73,7 +73,11 @@ public class NERPlugin implements EmiPlugin {
         addAllSafely(registry, "dungeon", () -> {
             List<EmiRecipe> recipes = new ArrayList<EmiRecipe>();
             for (DungeonEntry entry : MITEChestScraper.scrape()) {
-                recipes.add(new DungeonEmiRecipe(entry));
+                int pageSize = DungeonEmiRecipe.getPageSize();
+                int pageCount = (entry.getChestDrops().size() + pageSize - 1) / pageSize;
+                for (int page = 0; page < pageCount; page++) {
+                    recipes.add(new DungeonEmiRecipe(entry, page, pageCount));
+                }
             }
             return recipes;
         });

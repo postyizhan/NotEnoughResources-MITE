@@ -30,17 +30,35 @@ public class MobEmiRecipe implements EmiRecipe {
     private static final int ROW_HEIGHT = 18;
     private static final int MIN_HEIGHT = 60;
     private static final int FOOTER_HEIGHT = 24;
+    private static final int PAGE_SIZE = 3;
 
     private final MobEntry entry;
     private final ResourceLocation id;
+    private final List<DropItem> pageDrops = new ArrayList<DropItem>();
+    private final int page;
+    private final int pageCount;
     private final List<EmiStack> outputs = new ArrayList<EmiStack>();
 
     public MobEmiRecipe(MobEntry entry) {
+        this(entry, 0, 1);
+    }
+
+    public MobEmiRecipe(MobEntry entry, int page, int pageCount) {
         this.entry = entry;
-        this.id = new ResourceLocation(NEResources.MOD_ID, "mob/" + entry.getNameKey());
-        for (DropItem drop : entry.getDrops()) {
+        this.page = page;
+        this.pageCount = pageCount;
+        this.id = new ResourceLocation(NEResources.MOD_ID, "mob/" + entry.getNameKey() + "/" + page);
+        int first = page * PAGE_SIZE;
+        int last = Math.min(first + PAGE_SIZE, entry.getDrops().size());
+        for (int index = first; index < last; index++) {
+            DropItem drop = entry.getDrops().get(index);
+            pageDrops.add(drop);
             outputs.add(EmiStack.of(drop.item).setChance(Math.min(drop.chance, 1.0F)));
         }
+    }
+
+    public static int getPageSize() {
+        return PAGE_SIZE;
     }
 
     @Override
@@ -83,7 +101,7 @@ public class MobEmiRecipe implements EmiRecipe {
         // Keep the footer below the final drop row; the old four-pixel tail let the row label
         // overlap the experience line when a mob had several drops.
         return Math.max(MIN_HEIGHT,
-                FIRST_DROP_Y + entry.getDrops().size() * ROW_HEIGHT + FOOTER_HEIGHT);
+                FIRST_DROP_Y + PAGE_SIZE * ROW_HEIGHT + FOOTER_HEIGHT);
     }
 
     @Override
@@ -104,7 +122,11 @@ public class MobEmiRecipe implements EmiRecipe {
 
     private void addSpawnInfo(WidgetHolder widgets) {
         int panelHeight = getDisplayHeight();
-        widgets.addText(Text.translatable(entry.getNameKey()).asOrderedText(), 2, panelHeight - 20,
+        String name = StatCollector.translateToLocal(entry.getNameKey());
+        if (pageCount > 1) {
+            name += " (" + (page + 1) + "/" + pageCount + ")";
+        }
+        widgets.addText(Text.literal(name).asOrderedText(), 2, panelHeight - 20,
                 0xFFFFFFFF, false);
         widgets.addText(Text.literal(entry.getLightLevel().toString()).asOrderedText(), 2, panelHeight - 10,
                 0xFFA0A0A0, false);
@@ -115,7 +137,7 @@ public class MobEmiRecipe implements EmiRecipe {
     }
 
     private void addDrops(WidgetHolder widgets) {
-        List<DropItem> drops = entry.getDrops();
+        List<DropItem> drops = pageDrops;
         for (int i = 0; i < drops.size(); i++) {
             DropItem drop = drops.get(i);
             int y = FIRST_DROP_Y + i * ROW_HEIGHT;

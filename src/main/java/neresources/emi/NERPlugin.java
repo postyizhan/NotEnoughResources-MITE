@@ -59,7 +59,11 @@ public class NERPlugin implements EmiPlugin {
         addAllSafely(registry, "mob", () -> {
             List<EmiRecipe> recipes = new ArrayList<EmiRecipe>();
             for (MobEntry entry : MITEMobData.collect()) {
-                recipes.add(new MobEmiRecipe(entry));
+                int pageSize = MobEmiRecipe.getPageSize();
+                int pageCount = Math.max(1, (entry.getDrops().size() + pageSize - 1) / pageSize);
+                for (int page = 0; page < pageCount; page++) {
+                    recipes.add(new MobEmiRecipe(entry, page, pageCount));
+                }
             }
             return recipes;
         });

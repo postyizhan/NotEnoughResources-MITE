@@ -158,7 +158,7 @@ public class TradeEmiRecipe implements EmiRecipe {
         }
         widgets.addTexture(EmiTexture.EMPTY_ARROW, ARROW_X, SLOT_Y);
 
-        SlotWidget output = addSlot(widgets, outputDisplay, OUTPUT_X).recipeContext(this);
+        SlotWidget output = addSlot(widgets, outputDisplay, OUTPUT_X);
         final String noteKey = entry.getNoteKey();
         if (noteKey != null) {
             output.appendTooltip(() -> TooltipComponent.of(
@@ -169,9 +169,10 @@ public class TradeEmiRecipe implements EmiRecipe {
         widgets.addText(Text.literal(uses).asOrderedText(), CONTENT_X, HEIGHT - 8, 0xFFD48333, true);
     }
 
-    private static SlotWidget addSlot(WidgetHolder widgets, EmiIngredient ingredient, int x) {
+    private SlotWidget addSlot(WidgetHolder widgets, EmiIngredient ingredient, int x) {
         return widgets.addSlot(ingredient, x, SLOT_Y)
-                .backgroundTexture(SLOT_TEXTURE, EmiTexture.SLOT.u, EmiTexture.SLOT.v);
+                .backgroundTexture(SLOT_TEXTURE, EmiTexture.SLOT.u, EmiTexture.SLOT.v)
+                .recipeContext(this);
     }
 
     private void addVillager(WidgetHolder widgets) {

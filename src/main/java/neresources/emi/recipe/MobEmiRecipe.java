@@ -29,6 +29,7 @@ public class MobEmiRecipe implements EmiRecipe {
     private static final int FIRST_DROP_Y = 4;
     private static final int ROW_HEIGHT = 18;
     private static final int MIN_HEIGHT = 60;
+    private static final int FOOTER_HEIGHT = 24;
 
     private final MobEntry entry;
     private final ResourceLocation id;
@@ -79,7 +80,10 @@ public class MobEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return Math.max(MIN_HEIGHT, FIRST_DROP_Y + entry.getDrops().size() * ROW_HEIGHT + 4);
+        // Keep the footer below the final drop row; the old four-pixel tail let the row label
+        // overlap the experience line when a mob had several drops.
+        return Math.max(MIN_HEIGHT,
+                FIRST_DROP_Y + entry.getDrops().size() * ROW_HEIGHT + FOOTER_HEIGHT);
     }
 
     @Override

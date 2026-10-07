@@ -152,7 +152,9 @@ public class TradeEmiRecipe implements EmiRecipe {
         if (inputs.size() > 1) {
             widgets.addSlot(inputs.get(1), SECOND_SLOT_X, SLOT_Y);
         } else {
-            widgets.addSlot(SECOND_SLOT_X, SLOT_Y);
+            // EMI treats an empty stack's zero chance as a special slot background. Use the
+            // ordinary input chance so an unused second input slot has the same frame colour.
+            widgets.addSlot(EmiStack.EMPTY.copy().setChance(1.0F), SECOND_SLOT_X, SLOT_Y);
         }
         widgets.addTexture(EmiTexture.EMPTY_ARROW, ARROW_X, SLOT_Y);
 

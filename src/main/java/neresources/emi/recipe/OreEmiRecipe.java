@@ -22,6 +22,7 @@ import shims.java.net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /** One ore's height distribution: the ores and drops on the left, the curve on the right. */
 public class OreEmiRecipe implements EmiRecipe {
@@ -136,8 +137,8 @@ public class OreEmiRecipe implements EmiRecipe {
                         values, maxValue, entry.getColour()));
 
         // A separate hover region over the plot reports the exact chance at the hovered height.
-        widgets.addTooltip((mouseX, mouseY) -> hoverTooltip(mouseX),
-                GRAPH_X, GRAPH_BASELINE_Y - GRAPH_HEIGHT, GRAPH_WIDTH, GRAPH_HEIGHT);
+        widgets.add(widgets.addTooltip((mouseX, mouseY) -> hoverTooltip(mouseX),
+                GRAPH_X, GRAPH_BASELINE_Y - GRAPH_HEIGHT, GRAPH_WIDTH + 1, GRAPH_HEIGHT + 1));
     }
 
     private List<TooltipComponent> hoverTooltip(int mouseX) {
@@ -145,13 +146,13 @@ public class OreEmiRecipe implements EmiRecipe {
         if (values.length < 2) {
             return tooltip;
         }
-        float step = (float) GRAPH_WIDTH / (values.length - 1);
-        int index = Math.round((mouseX - GRAPH_X) / step);
-        if (index < 0 || index >= values.length) {
-            return tooltip;
-        }
-        String line = String.format("Y: %d (%.3f%%)", startY + index, values[index] * 100.0F);
-        tooltip.add(TooltipComponent.of(Text.literal(line.replace(',', '.')).asOrderedText()));
+        int index = Math.round((mouseX - GRAPH_X) * (values.length - 1) / (float) GRAPH_WIDTH);
+        index = Math.max(0, Math.min(index, values.length - 1));
+        String height = StatCollector.translateToLocal("ner.ore.hoverY") + ": " + (startY + index);
+        String chance = StatCollector.translateToLocal("ner.ore.chance") + ": "
+                + String.format(Locale.ROOT, "%.3f%%", values[index] * 100.0F);
+        tooltip.add(TooltipComponent.of(Text.literal(height).asOrderedText()));
+        tooltip.add(TooltipComponent.of(Text.literal(chance).asOrderedText()));
         return tooltip;
     }
 

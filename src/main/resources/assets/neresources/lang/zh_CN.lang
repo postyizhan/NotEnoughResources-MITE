@@ -10,6 +10,8 @@ ner.above=高于
 ner.below=低于
 
 ner.ore.bestY=最佳高度
+ner.ore.hoverY=高度
+ner.ore.chance=生成概率
 ner.ore.dimensions=维度
 ner.ore.biomes=生物群系
 

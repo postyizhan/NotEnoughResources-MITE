@@ -10,6 +10,8 @@ ner.above=above
 ner.below=below
 
 ner.ore.bestY=Best Y
+ner.ore.hoverY=Height
+ner.ore.chance=Generation chance
 ner.ore.dimensions=Dimensions
 ner.ore.biomes=Biomes
 

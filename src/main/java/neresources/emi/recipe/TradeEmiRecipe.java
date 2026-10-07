@@ -45,6 +45,8 @@ public class TradeEmiRecipe implements EmiRecipe {
     private static final int ARROW_X = 60;
     private static final int OUTPUT_X = 85;
 
+    private static final ResourceLocation SLOT_TEXTURE = EmiTexture.SLOT.texture;
+
     /**
      * One villager per profession, shared by every recipe so the models are built once. A profession
      * that could not be built is remembered as an absent value, because EMI rebuilds a recipe's widgets
@@ -148,17 +150,15 @@ public class TradeEmiRecipe implements EmiRecipe {
         addVillager(widgets);
         widgets.addText(Text.literal(title()).asOrderedText(), CONTENT_X, 0, 0xFFFFFFFF, true);
 
-        widgets.addSlot(inputs.get(0), CONTENT_X, SLOT_Y);
+        addSlot(widgets, inputs.get(0), CONTENT_X);
         if (inputs.size() > 1) {
-            widgets.addSlot(inputs.get(1), SECOND_SLOT_X, SLOT_Y);
+            addSlot(widgets, inputs.get(1), SECOND_SLOT_X);
         } else {
-            // EMI treats an empty stack's zero chance as a special slot background. Use the
-            // ordinary input chance so an unused second input slot has the same frame colour.
-            widgets.addSlot(EmiStack.EMPTY.copy().setChance(1.0F), SECOND_SLOT_X, SLOT_Y);
+            addSlot(widgets, EmiStack.EMPTY.copy().setChance(1.0F), SECOND_SLOT_X);
         }
         widgets.addTexture(EmiTexture.EMPTY_ARROW, ARROW_X, SLOT_Y);
 
-        SlotWidget output = widgets.addSlot(outputDisplay, OUTPUT_X, SLOT_Y).recipeContext(this);
+        SlotWidget output = addSlot(widgets, outputDisplay, OUTPUT_X).recipeContext(this);
         final String noteKey = entry.getNoteKey();
         if (noteKey != null) {
             output.appendTooltip(() -> TooltipComponent.of(
@@ -167,6 +167,11 @@ public class TradeEmiRecipe implements EmiRecipe {
 
         String uses = StatCollector.translateToLocalFormatted("ner.trade.maxUses", MITETradeData.MAX_USES);
         widgets.addText(Text.literal(uses).asOrderedText(), CONTENT_X, HEIGHT - 8, 0xFFD48333, true);
+    }
+
+    private static SlotWidget addSlot(WidgetHolder widgets, EmiIngredient ingredient, int x) {
+        return widgets.addSlot(ingredient, x, SLOT_Y)
+                .backgroundTexture(SLOT_TEXTURE, EmiTexture.SLOT.u, EmiTexture.SLOT.v);
     }
 
     private void addVillager(WidgetHolder widgets) {

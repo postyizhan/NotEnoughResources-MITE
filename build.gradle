@@ -43,13 +43,11 @@ dependencies {
     // Use implementation for required mods, compileOnly for optional integrations,
     // and localRuntime for mods needed only in the development environment.
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
     implementation("it.unimi.dsi:fastutil:8.5.12")
     implementation("com.google.code.gson:gson:2.11.0")
 
-    fml "com.github.MinecraftIsTooEasy:FishModLoader:3.4.2"
-    implementation "com.github.MinecraftIsTooEasy:FishModLoader:3.4.2"
+    fml "com.github.MinecraftIsTooEasy:FishModLoader:${project.loader_version}"
+    implementation "com.github.MinecraftIsTooEasy:FishModLoader:${project.loader_version}"
 
     // The most basic dependency library mod, with a status similar to Fabric API
     implementation "com.github.MinecraftIsTooEasy:RustedIronCore:1.5.5"
@@ -108,38 +106,6 @@ tasks.register("probe", JavaExec) {
     description = "Checks that the MITE data this mod reads can be touched outside a running world."
     mainClass = "neresources.probe.HeadlessProbe"
     classpath = sourceSets.main.runtimeClasspath
-}
-
-// Every forked JVM — runClient, runServer and probe — must be Java 17.
-// Mixin 0.8.5 bundles an ASM that cannot read class files above major version 61, so on a newer JVM
-// it fails to read the JDK's own classes ("Error loading class: java/lang/String") and then aborts
-// applying mixins. Loom's run tasks extend JavaExec, and Gradle does not hand JavaExec the toolchain
-// declared in java{} — only compile and test tasks get that — so the launcher is set explicitly here.
-//
-// On Apple Silicon the JVM must also be x86_64. LWJGL 2.9.1 predates arm64 Macs and ships no arm64
-// macOS natives, so an arm64 JVM dies in Sys.<clinit> with an UnsatisfiedLinkError on liblwjgl.dylib
-// before the window ever opens; an x86_64 JVM under Rosetta loads the shipped natives as they are.
-// Gradle matches toolchains on version and vendor only, never on architecture, so the executable is
-// pointed at an explicit JVM instead. Setting both `executable` and `javaLauncher` on one JavaExec
-// task makes Gradle compare the two and fail, hence the either/or below.
-def runJvmHome = project.findProperty("run_jvm_home")?.toString()?.trim()
-def runJavaExecutable = runJvmHome ? file("${runJvmHome}/bin/java") : null
-
-tasks.withType(JavaExec).configureEach {
-    if (runJavaExecutable != null) {
-        executable = runJavaExecutable.absolutePath
-        doFirst {
-            if (!runJavaExecutable.exists()) {
-                throw new GradleException(
-                        "run_jvm_home points at a missing JVM: ${runJavaExecutable}. Set it to an " +
-                                "x86_64 Java 17 home, or clear it to fall back to a Java 17 toolchain.")
-            }
-        }
-    } else {
-        javaLauncher = javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
 }
 
 processResources {

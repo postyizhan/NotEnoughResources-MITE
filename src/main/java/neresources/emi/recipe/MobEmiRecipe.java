@@ -30,7 +30,7 @@ public class MobEmiRecipe implements EmiRecipe {
     private static final int FIRST_DROP_Y = 4;
     private static final int ROW_HEIGHT = 18;
     private static final int MIN_HEIGHT = 60;
-    private static final int FOOTER_HEIGHT = 24;
+    private static final int FOOTER_HEIGHT = 34;
     private static final int PAGE_SIZE = 3;
     private static final int DROP_LABEL_X = DROP_X + ROW_HEIGHT + 2;
     private static final int DROP_LABEL_WIDTH = WIDTH - DROP_LABEL_X - 2;
@@ -116,8 +116,8 @@ public class MobEmiRecipe implements EmiRecipe {
 
     private void addEntity(WidgetHolder widgets) {
         int panelHeight = getDisplayHeight();
-        int feetY = panelHeight - 24;
-        float scale = EntityRenderHelper.scaleFor(entry.getEntity(), panelHeight - 40);
+        int feetY = panelHeight - 34;
+        float scale = EntityRenderHelper.scaleFor(entry.getEntity(), panelHeight - 50);
         widgets.addDrawable(0, 0, ENTITY_PANEL_WIDTH, panelHeight, (draw, mouseX, mouseY, delta) ->
                 EntityRenderHelper.render(ENTITY_PANEL_WIDTH / 2, feetY, scale,
                         ENTITY_PANEL_WIDTH / 2.0F - mouseX, feetY - 30.0F - mouseY, entry.getEntity()));
@@ -129,13 +129,13 @@ public class MobEmiRecipe implements EmiRecipe {
         if (pageCount > 1) {
             name += " (" + (page + 1) + "/" + pageCount + ")";
         }
-        widgets.addText(Text.literal(name).asOrderedText(), 2, panelHeight - 20,
+        widgets.addText(Text.literal(name).asOrderedText(), 2, panelHeight - 30,
                 0xFFFFFFFF, false);
-        widgets.addText(Text.literal(entry.getLightLevel().toString()).asOrderedText(), 2, panelHeight - 10,
+        widgets.addText(Text.literal(entry.getLightLevel().toString()).asOrderedText(), 2, panelHeight - 20,
                 0xFFA0A0A0, false);
 
         String experience = StatCollector.translateToLocal("ner.mob.exp") + ": " + entry.getExperience();
-        widgets.addText(Text.literal(experience).asOrderedText(), DROP_X, panelHeight - 10,
+        widgets.addText(Text.literal(experience).asOrderedText(), 2, panelHeight - 10,
                 0xFFA0A0A0, false);
     }
 

@@ -11,6 +11,7 @@ import neresources.api.util.DropItem;
 import neresources.emi.NERCategories;
 import neresources.emi.widget.EntityRenderHelper;
 import neresources.entry.MobEntry;
+import net.minecraft.Minecraft;
 import net.minecraft.ResourceLocation;
 import net.minecraft.StatCollector;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,8 @@ public class MobEmiRecipe implements EmiRecipe {
     private static final int MIN_HEIGHT = 60;
     private static final int FOOTER_HEIGHT = 24;
     private static final int PAGE_SIZE = 3;
+    private static final int DROP_LABEL_X = DROP_X + ROW_HEIGHT + 2;
+    private static final int DROP_LABEL_WIDTH = WIDTH - DROP_LABEL_X - 2;
 
     private final MobEntry entry;
     private final ResourceLocation id;
@@ -147,8 +150,13 @@ public class MobEmiRecipe implements EmiRecipe {
                 slot.appendTooltip(() -> TooltipComponent.of(Text.literal(conditional).asOrderedText()));
             }
 
-            widgets.addText(Text.literal(drop.toString()).asOrderedText(),
-                    DROP_X + ROW_HEIGHT + 2, y + 5, 0xFFFFFFFF, false);
+            widgets.addText(Text.literal(trimDropLabel(drop.toString())).asOrderedText(),
+                    DROP_LABEL_X, y + 5, 0xFFFFFFFF, false);
         }
+    }
+
+    /** Keep long range/chance labels inside the recipe panel instead of overpainting its footer. */
+    private static String trimDropLabel(String label) {
+        return Minecraft.getMinecraft().fontRenderer.trimStringToWidth(label, DROP_LABEL_WIDTH);
     }
 }

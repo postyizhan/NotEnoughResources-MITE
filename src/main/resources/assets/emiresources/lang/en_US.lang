@@ -1,0 +1,74 @@
+emi.category.emiresources.ore=Ore Distribution
+emi.category.emiresources.mob=Mob Drops
+emi.category.emiresources.plant=Plant Drops
+emi.category.emiresources.dungeon=Chest Loot
+emi.category.emiresources.enchantment=Enchantments
+emi.category.emiresources.trade=Villager Trades
+
+emir.any=any
+emir.above=above
+emir.below=below
+
+emir.ore.bestY=Best Y
+emir.ore.hoverY=Height
+emir.ore.chance=Geemiration chance
+emir.ore.dimensions=Dimensions
+emir.ore.biomes=Biomes
+
+emir.mob.lightLevel=Light level
+emir.mob.lightLevel.openSky=%s under open sky
+emir.mob.exp=Experience
+emir.mob.biome=Biomes
+
+emir.stacks=Stacks: %s
+
+emir.dungeon.dungeonChest=Dungeon Chest
+emir.dungeon.dungeonChestUnderworld=Dungeon Chest (Underworld)
+emir.dungeon.mineshaftCorridor=Abandoned Mineshaft
+emir.dungeon.pyramidDesertChest=Desert Pyramid
+emir.dungeon.strongholdCorridor=Stronghold Corridor
+emir.dungeon.strongholdLibrary=Stronghold Library
+emir.dungeon.strongholdCrossing=Stronghold Crossing
+emir.dungeon.villageBlacksmith=Village Blacksmith
+emir.dungeon.bonusChest=Bonus Chest
+
+emir.plant.tallGrass=Only when harvested by a player
+emir.plant.crop=Crop when mature, seed while growing
+emir.plant.potato=A blighted or unripe plant gives a poisonous potato
+emir.plant.melon=Seeds instead if destroyed by an explosion
+emir.plant.stem=A stem returns its own seed
+
+emir.dim.overworld=Overworld
+emir.dim.nether=Nether
+emir.dim.end=The End
+emir.dim.underworld=Underworld
+
+emir.conditional.playerKill=Only when killed by a player
+emir.conditional.rareDrop=Rare drop
+emir.conditional.burning=Only while burning
+emir.conditional.notBurning=Only while not burning
+emir.conditional.livestockWell=Only when fed, watered and not penned in
+emir.conditional.butchering=Increased by Butchering
+emir.conditional.looting=Increased by Looting
+emir.conditional.notFallDeath=Not after a fatal fall
+emir.conditional.saddled=Only when saddled
+emir.conditional.notSheared=Only when not sheared
+emir.conditional.silkTouch=Requires Silk Touch
+emir.conditional.fireball=Guaranteed when killed by your fireball
+emir.conditional.villager=Only for zombie villagers
+emir.conditional.witherSkeleton=Only for wither skeletons
+emir.conditional.longdead=Only for the longdead
+emir.conditional.explosion=Only when destroyed by an explosion
+emir.conditional.mature=Only when mature
+emir.conditional.blighted=Not when blighted
+emir.conditional.sizeOne=Only at the smallest size
+emir.conditional.web=One per unused web
+
+emir.trade.profession.farmer=Farmer
+emir.trade.profession.librarian=Librarian
+emir.trade.profession.priest=Priest
+emir.trade.profession.smith=Blacksmith
+emir.trade.profession.butcher=Butcher
+emir.trade.profession.villager=Villager
+emir.trade.maxUses=Up to %s uses
+emir.trade.enchantService=Comes back with a random enchantment

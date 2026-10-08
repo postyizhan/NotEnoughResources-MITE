@@ -75,7 +75,7 @@ Three things are deliberately not spelled out:
 
 ## Configuration
 
-`config/neresources.json`, written with defaults on first run:
+`config/emiresources.json`, written with defaults on first run:
 
 | Key | Default | Meaning |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ JAVA_HOME=/path/to/x64/jdk-17 ./gradlew runClient
 A headless diagnostic that exercises the MITE data this mod reads — the nine static loot tables, the
 null-world entity constructors, and all five data paths end to end — and prints what each produced.
 It needs no client and no GUI, so it is the quickest way to tell whether a MITE update moved
-something. Run it after changing anything under `neresources.mite`.
+something. Run it after changing anything under `emiresources.mite`.
 
 ## Credits
 

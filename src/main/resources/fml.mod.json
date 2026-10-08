@@ -15,17 +15,17 @@
     "sources": "https://github.com/postyizhan/NotEnoughResources-MITE"
   },
   "license": "MIT",
-  "icon": "assets/neresources/icon.png",
+  "icon": "assets/emiresources/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "neresources.NEResources"
+      "emiresources.EmiResources"
     ],
     "client": [
-      "neresources.NEResourcesClient"
+      "emiresources.EmiResourcesClient"
     ],
     "emi": [
-      "neresources.emi.NERPlugin"
+      "emiresources.emi.EmiRPlugin"
     ]
   },
   "depends": {
@@ -35,5 +35,5 @@
     "rusted_iron_core": ">=1.3.5",
     "emi": ">=1.1.27"
   },
-  "accessWidener": "neresources.accesswidener"
+  "accessWidener": "emiresources.accesswidener"
 }

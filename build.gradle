@@ -74,12 +74,12 @@ loom {
         runConfigs.named("client").get().vmArgs.remove("-XstartOnFirstThread")
     }
 
-    accessWidenerPath = file("src/main/resources/neresources.accesswidener")
+    accessWidenerPath = file("src/main/resources/emiresources.accesswidener")
     mergedMinecraftJar()
     setFML(fmlResolvedFile)
     dependencies.add("mappings", fmlMCPMappings())
     mods {
-        "neresources" {
+        "emiresources" {
             sourceSet sourceSets.main
 //            sourceSet sourceSets.client
 //            sourceSet sourceSets.server
@@ -100,11 +100,11 @@ loom {
 }
 
 // Development diagnostic: exercises the MITE static loot tables and null-world entity constructors
-// this mod depends on, without launching a client. See neresources.probe.HeadlessProbe.
+// this mod depends on, without launching a client. See emiresources.probe.HeadlessProbe.
 tasks.register("probe", JavaExec) {
     group = "verification"
     description = "Checks that the MITE data this mod reads can be touched outside a running world."
-    mainClass = "neresources.probe.HeadlessProbe"
+    mainClass = "emiresources.probe.HeadlessProbe"
     classpath = sourceSets.main.runtimeClasspath
 }
 
